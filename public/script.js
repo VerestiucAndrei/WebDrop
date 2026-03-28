@@ -25,6 +25,15 @@ window.manualLogin = function () {
         .catch(err => alert(err.message));
 };
 
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        startAppLogic();
+    } else {
+        signInWithEmailAndPassword(auth, myEmail, myPassword)
+            .catch((error) => alert("Login failed: " + error.message));
+    }
+});
+
 function startAppLogic() {
     const textArea = document.getElementById('clip');
     const textLocation = dbRef(database, 'clipboard/text');
@@ -54,7 +63,6 @@ function startAppLogic() {
             set(dbRef(database, 'stats/totalBytes'), newTotal);
         }, { onlyOnce: true });
 
-        
         const fileInput = document.getElementById('filePicker');
         const statusText = document.getElementById('status');
         const file = fileInput.files[0];
