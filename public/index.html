@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebDrop</title>
+    <style>
+        body { background: #121212; color: #e0e0e0; font-family: sans-serif; padding: 20px; }
+        textarea { width: 100%; height: 200px; background: #1e1e1e; color: white; border: 1px solid #333; border-radius: 8px; padding: 10px; }
+        .file-section { margin-top: 20px; border-top: 1px solid #333; padding-top: 20px; }
+        button { background: #007aff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>WebDrop</h1>
+    
+    <textarea id="clip" placeholder="Paste text here..."></textarea>
+    
+    <div class="file-section">
+        <input type="file" id="filePicker">
+        <button onclick="uploadFile()">Upload to Cloud</button>
+        <div id="status"></div>
+    </div>
+
+    <script type="module">
+        // Paste your Firebase Config here from the Project Settings
+    </script>
+</body>
+</html>
