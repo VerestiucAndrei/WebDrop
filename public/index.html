@@ -5,25 +5,28 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>WebDrop</title>
     <style>
-        body { background: #121212; color: #e0e0e0; font-family: sans-serif; padding: 20px; }
-        textarea { width: 100%; height: 200px; background: #1e1e1e; color: white; border: 1px solid #333; border-radius: 8px; padding: 10px; }
+        body { background: #121212; color: #e0e0e0; font-family: sans-serif; padding: 20px; max-width: 800px; margin: 0 auto; }
+        textarea { width: 100%; height: 300px; background: #1e1e1e; color: white; border: 1px solid #333; border-radius: 8px; padding: 15px; font-size: 16px; box-sizing: border-box; }
         .file-section { margin-top: 20px; border-top: 1px solid #333; padding-top: 20px; }
-        button { background: #007aff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; }
+        button { background: #007aff; color: white; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin-top: 10px; }
+        #status { margin-top: 10px; font-size: 14px; color: #888; }
+        #fileDisplay { margin-top: 20px; padding: 15px; background: #1e1e1e; border-radius: 8px; }
+        a { color: #007aff; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <h1>WebDrop</h1>
-    
-    <textarea id="clip" placeholder="Paste text here..."></textarea>
+    <textarea id="clip" placeholder="Wait for security clearance, then paste text here..."></textarea>
     
     <div class="file-section">
+        <h3>File Vault (4GB Limit)</h3>
         <input type="file" id="filePicker">
-        <button onclick="uploadFile()">Upload to Cloud</button>
-        <div id="status"></div>
+        <br>
+        <button onclick="uploadFile()">Upload File</button>
+        <div id="status">Ready.</div>
     </div>
+    <div id="fileDisplay"></div>
 
-    <script type="module">
-        // Paste your Firebase Config here from the Project Settings
-    </script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>
