@@ -17,19 +17,13 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 const storage = getStorage(app);
 
-// Should probably hide password in source code
-const myEmail = "andrei.verestiuc@gmail.com";
-const myPassword = "shaorma123";
-
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        document.getElementById('status').innerText = "Security cleared. System online.";
-        startAppLogic();
-    } else {
-        signInWithEmailAndPassword(auth, myEmail, myPassword)
-            .catch((error) => alert("Login failed: " + error.message));
-    }
-});
+window.manualLogin = function () {
+    const email = document.getElementById('emailInput').value;
+    const pass = document.getElementById('passInput').value;
+    signInWithEmailAndPassword(auth, email, pass)
+        .then(() => document.getElementById('loginScreen').style.display = 'none')
+        .catch(err => alert(err.message));
+};
 
 function startAppLogic() {
     const textArea = document.getElementById('clip');
@@ -53,6 +47,14 @@ function startAppLogic() {
     });
 
     window.uploadFile = function () {
+        // Update the "Total Usage" in the database
+        onValue(dbRef(database, 'stats/totalBytes'), (snapshot) => {
+            const currentTotal = snapshot.val() || 0;
+            const newTotal = currentTotal + file.size;
+            set(dbRef(database, 'stats/totalBytes'), newTotal);
+        }, { onlyOnce: true });
+
+        
         const fileInput = document.getElementById('filePicker');
         const statusText = document.getElementById('status');
         const file = fileInput.files[0];
@@ -76,4 +78,11 @@ function startAppLogic() {
             }
         );
     };
+
+    onValue(dbRef(database, 'stats/totalBytes'), (snapshot) => {
+    const bytes = snapshot.val() || 0;
+    const gb = (bytes / (1024 * 1024 * 1024)).toFixed(2);
+    document.getElementById('usageStat').innerText = gb + " GB";
+    document.getElementById('usageBar').style.width = (gb / 5 * 100) + "%";
+});
 }
