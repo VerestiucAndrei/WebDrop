@@ -40,7 +40,6 @@ function startAppLogic() {
     const textArea = document.getElementById('clip');
     const textLocation = dbRef(database, 'clipboard/text');
     const fileLocation = dbRef(database, 'clipboard/latestFile');
-    const fileDisplayArea = document.getElementById('fileDisplay');
 
     textArea.addEventListener('input', (e) => set(textLocation, e.target.value));
 
@@ -49,13 +48,43 @@ function startAppLogic() {
         if (textArea.value !== cloudText) textArea.value = cloudText;
     });
 
-    onValue(fileLocation, (snapshot) => {
-        const fileData = snapshot.val();
-        if (fileData) {
-            fileDisplayArea.innerHTML = `<p>Latest File: <strong>${fileData.name}</strong></p>
-                                                 <a href="${fileData.link}" target="_blank">Download Now</a>`;
-        }
-    });
+
+    /// Finish load Files function
+      window.loadFiles = function () {
+        const listFolderRef = storageRef(storage, 'uploads/');
+        const fileListContainer = document.getElementById('fileList');
+
+        const loadingMessage = document.createElement('li');
+        loadingMessage.textContent = "Loading files";
+        fileListContainer.appendChild(loadingMessage);
+
+        listAll(listFolderRef).then((result) => {
+            fileListContainer.removeChild(loadingMessage);
+
+            // No files uploaded
+            if (result.items.length == 0) {
+                const emptyMessage = document.createElement('li');
+                emptyMessage.textContent = "No files uploaded";
+                fileListContainer.appendChild(emptyMessage);
+                return;
+            }
+
+            result.items.forEach((itemRef) => {
+                // Create line
+                const line = document.createElement('li');
+                line.style.display = "flex";
+                line.style.justifyContent = "space-between";
+                
+                // Create filename element
+                const nameSpan = document.createElement('span');
+                nameSpan.textContent = itemRef.name;
+
+                // Add row in list
+                line.appendChild(nameSpan);
+                fileListContainer.appendChild(line);
+            })
+        });
+    };
 
     window.uploadFile = function () {
         const fileInput = document.getElementById('filePicker');
@@ -89,40 +118,17 @@ function startAppLogic() {
                 });
             }
         );
-
+        loadFiles();
     };
-
-
-    window.loadFiles = function () {
-        const listFolderRef = storageRef(storage, 'uploads/');
-        const fileListContainer = document.getElementById('fileList');
-
-        const loadingMessage = document.createElement('li');
-        loadingMessage.textContent = "Loading files";
-        fileListContainer.appendChild(loadingMessage);
-
-        listAll(listFolderRef).then((result) => {
-            fileListContainer.removeChild(loadingMessage);
-
-            // No files uploaded
-            if (result.items.length == 0) {
-                const emptyMessage = document.createElement('li');
-                emptyMessage.textContent = "No files uploaded";
-                fileListContainer.appendChild(emptyMessage);
-                return;
-            }
-
-            
-        });
-    };
-
 
     // Update storage statistics
     onValue(dbRef(database, 'stats/totalBytes'), (snapshot) => {
         usedStorageBytes = snapshot.val() || 0;
-        const gb = (bytes / (1024 * 1024 * 1024)).toFixed(4);
+        const gb = (usedStorageBytes / (1024 * 1024 * 1024)).toFixed(4);
 
         document.getElementById('usageStat').innerText = gb + " GB";
         document.getElementById('usageBar').style.width = (usedStorageBytes / maxStorageBytes * 100) + "%";
     });
+
+    loadFiles();
 }
