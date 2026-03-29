@@ -95,29 +95,24 @@ function startAppLogic() {
 
     window.loadFiles = function () {
         const listFolderRef = storageRef(storage, 'uploads/');
-        const fileListHTML = document.getElementById('fileList');
-        fileListHTML.innerHTML = "Loading files";
+        const fileListContainer = document.getElementById('fileList');
 
-        listAll(listFolderRef).then((res) => {
-            fileListHTML.innerHTML = "";
+        const loadingMessage = document.createElement('li');
+        loadingMessage.textContent = "Loading files";
+        fileListContainer.appendChild(loadingMessage);
 
-            if (res.items.length == 0) {
-                fileListHTML.innerHTML = "<li>Vault is empty.</li>";
+        listAll(listFolderRef).then((result) => {
+            fileListContainer.removeChild(loadingMessage);
+
+            // No files uploaded
+            if (result.items.length == 0) {
+                const emptyMessage = document.createElement('li');
+                emptyMessage.textContent = "No files uploaded";
+                fileListContainer.appendChild(emptyMessage);
                 return;
             }
 
-            res.items.forEach((itemRef) => {
-                const line = document.createElement('line');
-                li.style.marginBottom = "10px";
-                li.style.display = "flex";
-                li.style.justifyContent = "space-between";
-
-                li.innerHTML = `
-                <span>${itemRef.name}</span>
-                <button onclick="deleteFile('${itemRef.name}')" style="background: #ff3b30; padding: 5px 10px;">Delete</button>
-                `;
-                fileListHTML.appendChild(li);
-            });
+            
         });
     };
 
