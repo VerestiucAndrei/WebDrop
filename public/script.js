@@ -4,12 +4,12 @@ import { getDatabase, ref as dbRef, set, onValue, update, increment } from "http
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, listAll, deleteObject, getMetadata } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY_HERE",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    databaseURL: "https://YOUR_PROJECT_URL.firebaseio.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app"
-};
+       apiKey: "YOUR_API_KEY",
+       authDomain: "YOUR_PROJECT.firebaseapp.com",
+       databaseURL: "YOUR_DATABASE_URL",
+       projectId: "YOUR_PROJECT_ID",
+       storageBucket: "YOUR_PROJECT.firebasestorage.app"
+   };
 
 let usedStorageBytes = 0;
 const maxStorageBytes = 5 * 1024 * 1024 * 1024; // 5 GB
