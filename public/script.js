@@ -100,10 +100,16 @@ function startAppLogic() {
                 const line = document.createElement('li');
                 line.style.display = "flex";
                 line.style.justifyContent = "space-between";
+                line.style.alignItems = "center";
                 
                 // Create filename element
                 const nameSpan = document.createElement('span');
                 nameSpan.textContent = itemRef.name;
+
+                // Button Group
+                const buttonGroup = document.createElement('div');
+                buttonGroup.style.display = "flex";
+                buttonGroup.style.gap = "10px";
 
                 // Create download button
                 const downloadButton = document.createElement('button');
@@ -128,9 +134,11 @@ function startAppLogic() {
                 deleteButton.onclick = () => window.deleteFile(itemRef.name);
 
                 // Add row in list
+                buttonGroup.appendChild(downloadButton);
+                buttonGroup.appendChild(deleteButton);
+
                 line.appendChild(nameSpan);
-                line.appendChild(downloadButton);
-                line.appendChild(deleteButton);
+                line.appendChild(buttonGroup);
                 fileListContainer.appendChild(line);
             })
         });
