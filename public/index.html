@@ -76,7 +76,14 @@
         <button onclick="manualLogin()">Login</button>
     </div>
 
-    <h1>WebDrop</h1>
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+        <h1 style="margin: 0;">WebDrop</h1>
+
+        <button onclick="refreshApp()" id="refreshButton"
+            style="background: #333; color: white; border: 1px solid #555; padding: 8px 12px; border-radius: 5px; cursor: pointer; display: flex; align-items: center; gap: 5px;">
+            <span id="refreshIcon" style="font-size: 16px;">↻</span>
+        </button>
+    </div>
 
     <div style="background: #1e1e1e; padding: 10px; border-radius: 8px; margin-bottom: 20px; font-size: 12px;">
         <span>Cloud Storage Used: </span>
@@ -101,7 +108,7 @@
         <ul id="fileList" style="list-style-type: none; padding: 0;"></ul>
     </div>
 
-    <script type="module" src="script.js?v1.5"></script>
+    <script type="module" src="script.js?v1.64"></script>
 </body>
 
 </html>

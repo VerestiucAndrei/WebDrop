@@ -27,6 +27,21 @@ onAuthStateChanged(auth, (user) => {
     }
 });
 
+// Refresh page function
+window.refreshApp = function() {
+    const btn = document.getElementById('refreshButton');
+
+    if (btn) {
+        btn.style.opacity = "0.5";
+        btn.disabled = true;
+    }
+
+    setTimeout(() => {
+        window.location.href = window.location.href.split('#')[0];
+    }, 50);
+};
+
+// Manual login
 window.manualLogin = function () {
     const email = document.getElementById('emailInput').value;
     const pass = document.getElementById('passInput').value;
@@ -67,7 +82,7 @@ function startAppLogic() {
                 alert("File deleted successfully");
             }).catch(err => alert("Error deleting: " + err.message));
 
-        }).catch(err => alert("Error"));
+        }).catch(err => alert("Error" + err.message));
     }
 
     window.loadFiles = function () {
@@ -154,11 +169,6 @@ function startAppLogic() {
         if (file && file.size + usedStorageBytes > maxStorageBytes)
             return alert("Upload blocked: Not enough free space");
 
-        // Update the "Total Usage" in the database
-        update(dbRef(database, 'stats'), {
-            totalBytes: increment(file.size)
-        });
-
         const vaultLocation = storageRef(storage, 'uploads/' + file.name);
         const uploadTask = uploadBytesResumable(vaultLocation, file);
 
@@ -172,20 +182,28 @@ function startAppLogic() {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     statusText.innerText = "Upload Complete!";
                     set(fileLocation, { name: file.name, link: downloadURL });
+
+                    // Update the "Total Usage" in the database
+                    update(dbRef(database, 'stats'), {
+                        totalBytes: increment(file.size)
+                    });
                     loadFiles();
+
+                    alert("File uploaded successfuly");
+                    fileInput.value = "";
                 });
             }
-        );
+        )
     };
 
-    // Update storage statistics
+    // Update storage statistics and trigger file list changes
     onValue(dbRef(database, 'stats/totalBytes'), (snapshot) => {
         usedStorageBytes = snapshot.val() || 0;
         const gb = (usedStorageBytes / (1024 * 1024 * 1024)).toFixed(4);
 
         document.getElementById('usageStat').innerText = gb + " GB";
         document.getElementById('usageBar').style.width = (usedStorageBytes / maxStorageBytes * 100) + "%";
-    });
 
-    loadFiles();
+        loadFiles();
+    });
 }
