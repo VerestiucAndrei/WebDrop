@@ -4,11 +4,11 @@ import { getDatabase, ref as dbRef, set, onValue, update, increment } from "http
 import { getStorage, ref as storageRef, uploadBytesResumable, getDownloadURL, listAll, deleteObject, getMetadata } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-storage.js";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDraLhdj40PioYIGBRhxc1a3s_pz3vAq0E",
-    authDomain: "webdrop-45d42.firebaseapp.com",
-    databaseURL: "https://webdrop-45d42-default-rtdb.firebaseio.com",
-    projectId: "webdrop-45d42",
-    storageBucket: "webdrop-45d42.firebasestorage.app"
+    apiKey: "YOUR_API_KEY_HERE",
+    authDomain: "YOUR_PROJECT.firebaseapp.com",
+    databaseURL: "https://YOUR_PROJECT_URL.firebaseio.com",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_PROJECT_ID.firebasestorage.app"
 };
 
 let usedStorageBytes = 0;
