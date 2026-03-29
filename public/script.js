@@ -48,6 +48,27 @@ function startAppLogic() {
         if (textArea.value !== cloudText) textArea.value = cloudText;
     });
 
+    window.deleteFile = function(fileName) {
+        if (!confirm('Are you sure you want to delete ${fileName}?')) return;
+
+        const fireRef = storageRef(storage, 'uploads/' + fileName);
+
+        // Get file size
+        getMetadata(FileRef).then((metadata) => {
+            const fileSize = metadata.size;
+
+            // Delete file
+            deleteObject(fileRef).then(() => {
+                update(dbRef(database,'stats'), {
+                    totalBytes: increment(-fileSize)
+                });
+
+                loadFiles();
+                alert("File deleted successfully");
+            }).catch(err => alert("Error deleting: " + err.message));
+
+        });
+    }
 
     /// Finish load Files function
       window.loadFiles = function () {
