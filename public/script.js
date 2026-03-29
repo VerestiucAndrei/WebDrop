@@ -51,10 +51,10 @@ function startAppLogic() {
     window.deleteFile = function(fileName) {
         if (!confirm('Are you sure you want to delete ${fileName}?')) return;
 
-        const fireRef = storageRef(storage, 'uploads/' + fileName);
+        const fileRef = storageRef(storage, 'uploads/' + fileName);
 
         // Get file size
-        getMetadata(FileRef).then((metadata) => {
+        getMetadata(fileRef).then((metadata) => {
             const fileSize = metadata.size;
 
             // Delete file
@@ -67,13 +67,18 @@ function startAppLogic() {
                 alert("File deleted successfully");
             }).catch(err => alert("Error deleting: " + err.message));
 
-        });
+        }).catch(err => alert("Error"));
     }
 
     /// Finish load Files function
       window.loadFiles = function () {
         const listFolderRef = storageRef(storage, 'uploads/');
         const fileListContainer = document.getElementById('fileList');
+
+        // Clear the list
+        while (fileListContainer.firstChild) {
+            fileListContainer.removeChild(fileListContainer.firstChild);
+        }
 
         const loadingMessage = document.createElement('li');
         loadingMessage.textContent = "Loading files";
@@ -100,8 +105,32 @@ function startAppLogic() {
                 const nameSpan = document.createElement('span');
                 nameSpan.textContent = itemRef.name;
 
+                // Create download button
+                const downloadButton = document.createElement('button');
+                downloadButton.textContent = "Download";
+
+                downloadButton.onclick = () => {
+                    downloadButton.textContent = "Downloading...";
+                    
+                    getDownloadURL(itemRef).then((url) => {
+                        window.open(url, '_blank');
+                    }).catch((err) => {
+                        alert("Error fetching link " + err.message);
+                    });
+
+                    downloadButton.textContent = "Download";
+                };
+
+                // Create delete button
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = "Delete";
+
+                deleteButton.onclick = () => window.deleteFile(itemRef.name);
+
                 // Add row in list
                 line.appendChild(nameSpan);
+                line.appendChild(downloadButton);
+                line.appendChild(deleteButton);
                 fileListContainer.appendChild(line);
             })
         });
