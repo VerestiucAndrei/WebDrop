@@ -17,22 +17,22 @@ const auth = getAuth(app);
 const database = getDatabase(app);
 const storage = getStorage(app);
 
-window.manualLogin = function () {
-    const email = document.getElementById('emailInput').value;
-    const pass = document.getElementById('passInput').value;
-    signInWithEmailAndPassword(auth, email, pass)
-        .then(() => document.getElementById('loginScreen').style.display = 'none')
-        .catch(err => alert(err.message));
-};
-
 onAuthStateChanged(auth, (user) => {
     if (user) {
         startAppLogic();
     } else {
-        signInWithEmailAndPassword(auth, myEmail, myPassword)
-            .catch((error) => alert("Login failed: " + error.message));
+        document.getElementById('loginScreen').style.display = 'flex';
     }
 });
+
+window.manualLogin = function () {
+    const email = document.getElementById('emailInput').value;
+    const pass = document.getElementById('passInput').value;
+    
+    signInWithEmailAndPassword(auth, email, pass)
+        .then(() => document.getElementById('loginScreen').style.display = 'none')
+        .catch(err => alert(err.message));
+};
 
 function startAppLogic() {
     const textArea = document.getElementById('clip');
