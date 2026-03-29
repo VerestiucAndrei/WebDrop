@@ -44,6 +44,7 @@ To set up and run this project yourself, follow these steps:
      ```
    * Go to **Storage > Rules**, replace the existing text with this, enter your UID in the specified field, and hit publish:
      ```javascript
+     rules_version = '2';
      service firebase.storage {
        match /b/{bucket}/o {
          match /{allPaths=**} {
