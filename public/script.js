@@ -48,8 +48,8 @@ function startAppLogic() {
         if (textArea.value !== cloudText) textArea.value = cloudText;
     });
 
-    window.deleteFile = function(fileName) {
-        if (!confirm('Are you sure you want to delete ${fileName}?')) return;
+    window.deleteFile = function (fileName) {
+        if (!confirm(`Are you sure you want to delete ${fileName}?`)) return;
 
         const fileRef = storageRef(storage, 'uploads/' + fileName);
 
@@ -59,7 +59,7 @@ function startAppLogic() {
 
             // Delete file
             deleteObject(fileRef).then(() => {
-                update(dbRef(database,'stats'), {
+                update(dbRef(database, 'stats'), {
                     totalBytes: increment(-fileSize)
                 });
 
@@ -70,8 +70,7 @@ function startAppLogic() {
         }).catch(err => alert("Error"));
     }
 
-    /// Finish load Files function
-      window.loadFiles = function () {
+    window.loadFiles = function () {
         const listFolderRef = storageRef(storage, 'uploads/');
         const fileListContainer = document.getElementById('fileList');
 
@@ -101,7 +100,7 @@ function startAppLogic() {
                 line.style.display = "flex";
                 line.style.justifyContent = "space-between";
                 line.style.alignItems = "center";
-                
+
                 // Create filename element
                 const nameSpan = document.createElement('span');
                 nameSpan.textContent = itemRef.name;
@@ -117,7 +116,7 @@ function startAppLogic() {
 
                 downloadButton.onclick = () => {
                     downloadButton.textContent = "Downloading...";
-                    
+
                     getDownloadURL(itemRef).then((url) => {
                         window.open(url, '_blank');
                     }).catch((err) => {
@@ -152,7 +151,7 @@ function startAppLogic() {
         if (!file) return alert("Pick a file first!");
 
         // Check if file exceeds remaining storage capacity
-        if (file &&file.size + usedStorageBytes > maxStorageBytes)
+        if (file && file.size + usedStorageBytes > maxStorageBytes)
             return alert("Upload blocked: Not enough free space");
 
         // Update the "Total Usage" in the database
@@ -173,10 +172,10 @@ function startAppLogic() {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     statusText.innerText = "Upload Complete!";
                     set(fileLocation, { name: file.name, link: downloadURL });
+                    loadFiles();
                 });
             }
         );
-        loadFiles();
     };
 
     // Update storage statistics
