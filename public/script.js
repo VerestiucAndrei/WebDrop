@@ -54,7 +54,6 @@ window.manualLogin = function () {
 function startAppLogic() {
     const textArea = document.getElementById('clip');
     const textLocation = dbRef(database, 'clipboard/text');
-    const fileLocation = dbRef(database, 'clipboard/latestFile');
 
     textArea.addEventListener('input', (e) => set(textLocation, e.target.value));
 
@@ -181,7 +180,6 @@ function startAppLogic() {
             () => {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     statusText.innerText = "Upload Complete!";
-                    set(fileLocation, { name: file.name, link: downloadURL });
 
                     // Update the "Total Usage" in the database
                     update(dbRef(database, 'stats'), {
